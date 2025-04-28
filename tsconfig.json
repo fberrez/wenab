@@ -8,6 +8,12 @@
     },
     {
       "path": "./apps/wenab-api"
+    },
+    {
+      "path": "./apps/wenab-frontend-e2e"
+    },
+    {
+      "path": "./apps/wenab-frontend"
     }
   ]
 }
