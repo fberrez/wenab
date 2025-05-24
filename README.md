@@ -45,10 +45,9 @@ npm install # or yarn install / pnpm install
 
 ```sh
 # API
-npx nx serve wenab-api
-
+npm run a:s
 # Frontend
-npx nx serve wenab-frontend
+npm run f:s
 ```
 
 **Build for production:**
