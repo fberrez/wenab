@@ -6,14 +6,7 @@ import {
   UnauthorizedException,
 } from "@nestjs/common";
 import { SupabaseService } from "./supabase.service";
-import {
-  SupabaseClient,
-  AuthError,
-  UserResponse,
-  AuthTokenResponse,
-  Session,
-  User,
-} from "@supabase/supabase-js";
+import { AuthError, Session, User } from "@supabase/supabase-js";
 import { SignUpDto, SignInDto, RefreshTokenDto } from "./dto";
 
 // Define a more generic type for auth responses that include user and session
@@ -40,14 +33,12 @@ export class AuthService {
       password,
     });
 
+    if (!response.data.user?.identities?.length) {
+      throw new ConflictException("User with this email already exists.");
+    }
+
     if (response.error) {
       this.logger.error("Error signing up:", response.error.message);
-      if (
-        response.error.message.includes("User already registered") ||
-        (response.error.status && response.error.status === 400)
-      ) {
-        throw new ConflictException("User with this email already exists.");
-      }
       throw new InternalServerErrorException(
         response.error.message || "An unexpected error occurred during sign up."
       );
@@ -86,10 +77,7 @@ export class AuthService {
     if (response.error) {
       this.logger.error("Error signing in:", response.error.message);
       // Common Supabase error for invalid credentials
-      if (
-        response.error.message === "Invalid login credentials" ||
-        response.error.status === 400
-      ) {
+      if (response.error.message === "Invalid login credentials") {
         throw new UnauthorizedException("Invalid email or password.");
       }
       // Handle other potential errors like email not confirmed if applicable
