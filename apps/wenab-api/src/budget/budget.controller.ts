@@ -20,6 +20,7 @@ import {
 import { BudgetService } from './budget.service';
 import { CategoryService } from './category.service';
 import { TransactionService } from './transaction.service';
+import { ZeroBasedBudgetingService } from './zero-based-budgeting.service';
 import { CreateBudgetDto, UpdateBudgetDto } from './dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
@@ -32,19 +33,20 @@ export class BudgetController {
     private readonly budgetService: BudgetService,
     private readonly categoryService: CategoryService,
     private readonly transactionService: TransactionService,
+    private readonly zeroBasedBudgetingService: ZeroBasedBudgetingService,
   ) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create a new budget' })
+  @ApiOperation({ summary: 'Create a new zero-based budget' })
   @ApiResponse({ status: 201, description: 'Budget created successfully' })
-  @ApiResponse({ status: 400, description: 'Bad request' })
+  @ApiResponse({ status: 400, description: 'Bad request - Zero-based budgeting validation failed' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async createBudget(
     @Body() createBudgetDto: CreateBudgetDto,
     @Request() req: any,
   ) {
     const userId = req.user.sub;
-    return this.budgetService.createBudget(createBudgetDto, userId);
+    return this.zeroBasedBudgetingService.createBudget(userId, createBudgetDto);
   }
 
   @Get()
@@ -151,6 +153,78 @@ export class BudgetController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getBudgetSummary(@Param('budgetId') budgetId: string, @Request() req: any) {
     const userId = req.user.sub;
-    return this.transactionService.getTransactionSummary(budgetId, userId);
+    return this.zeroBasedBudgetingService.getBudgetSummary(budgetId);
+  }
+
+  @Get(':budgetId/envelopes')
+  @ApiOperation({ summary: 'Get envelope status for all categories' })
+  @ApiResponse({ status: 200, description: 'Envelope status retrieved successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async getEnvelopeStatus(@Param('budgetId') budgetId: string, @Request() req: any) {
+    const userId = req.user.sub;
+    return this.zeroBasedBudgetingService.getEnvelopeStatus(budgetId);
+  }
+
+  @Get(':budgetId/ready-to-assign')
+  @ApiOperation({ summary: 'Get amount ready to assign' })
+  @ApiResponse({ status: 200, description: 'Ready to assign amount retrieved successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async getReadyToAssign(@Param('budgetId') budgetId: string, @Request() req: any) {
+    const userId = req.user.sub;
+    const amount = await this.zeroBasedBudgetingService.getReadyToAssign(budgetId);
+    return { readyToAssign: amount };
+  }
+
+  @Post(':budgetId/move-money')
+  @ApiOperation({ summary: 'Move money between categories' })
+  @ApiResponse({ status: 200, description: 'Money moved successfully' })
+  @ApiResponse({ status: 400, description: 'Insufficient funds or invalid request' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async moveMoney(
+    @Param('budgetId') budgetId: string,
+    @Body() moveMoneyDto: { fromCategoryId: string; toCategoryId: string; amount: number },
+    @Request() req: any,
+  ) {
+    const userId = req.user.sub;
+    await this.zeroBasedBudgetingService.moveMoney(
+      budgetId,
+      moveMoneyDto.fromCategoryId,
+      moveMoneyDto.toCategoryId,
+      moveMoneyDto.amount
+    );
+    return { message: 'Money moved successfully' };
+  }
+
+  @Post(':budgetId/assign-to-category')
+  @ApiOperation({ summary: 'Assign money from Ready to Assign to a category' })
+  @ApiResponse({ status: 200, description: 'Money assigned successfully' })
+  @ApiResponse({ status: 400, description: 'Insufficient funds in Ready to Assign' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async assignToCategory(
+    @Param('budgetId') budgetId: string,
+    @Body() assignDto: { categoryId: string; amount: number },
+    @Request() req: any,
+  ) {
+    const userId = req.user.sub;
+    await this.zeroBasedBudgetingService.assignToCategory(
+      budgetId,
+      assignDto.categoryId,
+      assignDto.amount
+    );
+    return { message: 'Money assigned successfully' };
+  }
+
+  @Post(':budgetId/rollover/:targetBudgetId')
+  @ApiOperation({ summary: 'Roll over unused funds to another budget' })
+  @ApiResponse({ status: 200, description: 'Funds rolled over successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async rolloverFunds(
+    @Param('budgetId') budgetId: string,
+    @Param('targetBudgetId') targetBudgetId: string,
+    @Request() req: any,
+  ) {
+    const userId = req.user.sub;
+    await this.zeroBasedBudgetingService.rolloverUnusedFunds(budgetId, targetBudgetId);
+    return { message: 'Funds rolled over successfully' };
   }
 }
