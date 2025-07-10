@@ -150,7 +150,7 @@ export function Subscription() {
             </div>
             <div>
               <label className="text-sm font-medium text-gray-500">Amount</label>
-              <p className="text-lg font-semibold">£{(subscription.amount / 100).toFixed(2)}</p>
+              <p className="text-lg font-semibold">€{(subscription.amount / 100).toFixed(2)}</p>
             </div>
           </div>
 
@@ -240,7 +240,7 @@ export function Subscription() {
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="font-medium">£{(payment.amount / 100).toFixed(2)}</p>
+                    <p className="font-medium">€{(payment.amount / 100).toFixed(2)}</p>
                     <Badge className={getStatusColor(payment.status)}>
                       {payment.status}
                     </Badge>

@@ -138,19 +138,23 @@ export function Pricing() {
       </div>
 
       {/* Plans */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Basic Plan */}
-        <Card className="relative">
+      <div className="flex justify-center">
+        <Card className="relative border-blue-500 shadow-lg max-w-md w-full">
+          <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+            <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-medium">
+              Complete Solution
+            </span>
+          </div>
           <CardHeader>
-            <CardTitle className="flex items-center">
-              <Zap className="mr-2 h-5 w-5 text-blue-600" />
-              Basic
+            <CardTitle className="flex items-center justify-center">
+              <Crown className="mr-2 h-5 w-5 text-blue-600" />
+              WENAB
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div>
+            <div className="text-center">
               <div className="text-3xl font-bold">
-                £{planData?.basic[selectedInterval]?.price}
+                €{planData?.basic[selectedInterval]?.price}
                 <span className="text-sm font-normal text-gray-500">/{selectedInterval === 'monthly' ? 'month' : 'year'}</span>
               </div>
               {selectedInterval === 'yearly' && (
@@ -162,101 +166,21 @@ export function Pricing() {
             <ul className="space-y-2">
               {planData?.basic[selectedInterval]?.features.map((feature, index) => (
                 <li key={index} className="flex items-center text-sm">
-                  <Check className="mr-2 h-4 w-4 text-green-500" />
-                  {feature}
+                  <Check className="mr-2 h-4 w-4 text-green-500 flex-shrink-0" />
+                  <span>{feature}</span>
                 </li>
               ))}
             </ul>
             <Button 
               className="w-full" 
-              variant="outline"
               onClick={() => handleSubscribe('basic')}
               disabled={createSubscriptionMutation.isPending && selectedPlan === 'basic'}
             >
-              {createSubscriptionMutation.isPending && selectedPlan === 'basic' ? 'Processing...' : 'Get Started'}
+              {createSubscriptionMutation.isPending && selectedPlan === 'basic' ? 'Processing...' : 'Start Free Trial'}
             </Button>
-          </CardContent>
-        </Card>
-
-        {/* Premium Plan */}
-        <Card className="relative border-blue-500 shadow-lg">
-          <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-            <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-medium">
-              Most Popular
-            </span>
-          </div>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Star className="mr-2 h-5 w-5 text-yellow-600" />
-              Premium
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <div className="text-3xl font-bold">
-                £{planData?.premium[selectedInterval]?.price}
-                <span className="text-sm font-normal text-gray-500">/{selectedInterval === 'monthly' ? 'month' : 'year'}</span>
-              </div>
-              {selectedInterval === 'yearly' && (
-                <div className="text-sm text-green-600 font-medium">
-                  Save {planData?.premium.yearly.savings}
-                </div>
-              )}
-            </div>
-            <ul className="space-y-2">
-              {planData?.premium[selectedInterval]?.features.map((feature, index) => (
-                <li key={index} className="flex items-center text-sm">
-                  <Check className="mr-2 h-4 w-4 text-green-500" />
-                  {feature}
-                </li>
-              ))}
-            </ul>
-            <Button 
-              className="w-full" 
-              onClick={() => handleSubscribe('premium')}
-              disabled={createSubscriptionMutation.isPending && selectedPlan === 'premium'}
-            >
-              {createSubscriptionMutation.isPending && selectedPlan === 'premium' ? 'Processing...' : 'Get Premium'}
-            </Button>
-          </CardContent>
-        </Card>
-
-        {/* Enterprise Plan */}
-        <Card className="relative">
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Crown className="mr-2 h-5 w-5 text-purple-600" />
-              Enterprise
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <div className="text-3xl font-bold">
-                £{planData?.enterprise[selectedInterval]?.price}
-                <span className="text-sm font-normal text-gray-500">/{selectedInterval === 'monthly' ? 'month' : 'year'}</span>
-              </div>
-              {selectedInterval === 'yearly' && (
-                <div className="text-sm text-green-600 font-medium">
-                  Save {planData?.enterprise.yearly.savings}
-                </div>
-              )}
-            </div>
-            <ul className="space-y-2">
-              {planData?.enterprise[selectedInterval]?.features.map((feature, index) => (
-                <li key={index} className="flex items-center text-sm">
-                  <Check className="mr-2 h-4 w-4 text-green-500" />
-                  {feature}
-                </li>
-              ))}
-            </ul>
-            <Button 
-              className="w-full" 
-              variant="outline"
-              onClick={() => handleSubscribe('enterprise')}
-              disabled={createSubscriptionMutation.isPending && selectedPlan === 'enterprise'}
-            >
-              {createSubscriptionMutation.isPending && selectedPlan === 'enterprise' ? 'Processing...' : 'Contact Sales'}
-            </Button>
+            <p className="text-xs text-gray-500 text-center">
+              34-day free trial • Cancel anytime
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -269,7 +193,7 @@ export function Pricing() {
               <h3 className="text-lg font-medium text-blue-900">Current Subscription</h3>
               <p className="text-blue-700">
                 You are currently on the {currentSubscription.plan_type} plan 
-                ({currentSubscription.interval} billing at £{(currentSubscription.amount / 100).toFixed(2)})
+                ({currentSubscription.interval} billing at €{(currentSubscription.amount / 100).toFixed(2)})
               </p>
               <p className="text-sm text-blue-600 mt-1">
                 Status: {currentSubscription.status}
@@ -284,6 +208,10 @@ export function Pricing() {
         <h2 className="text-2xl font-bold text-center mb-6">Frequently Asked Questions</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
+            <h3 className="font-medium mb-2">What's included in the free trial?</h3>
+            <p className="text-gray-600 text-sm">You get 34 days to test all features including zero-based budgeting, envelope system, bank integration, and more. No credit card required.</p>
+          </div>
+          <div>
             <h3 className="font-medium mb-2">Can I cancel anytime?</h3>
             <p className="text-gray-600 text-sm">Yes, you can cancel your subscription at any time. You'll continue to have access until the end of your current billing period.</p>
           </div>
@@ -292,12 +220,16 @@ export function Pricing() {
             <p className="text-gray-600 text-sm">We accept all major debit cards and bank transfers through GoCardless, ensuring secure and reliable payments.</p>
           </div>
           <div>
-            <h3 className="font-medium mb-2">Is there a free trial?</h3>
-            <p className="text-gray-600 text-sm">We offer a 14-day free trial on all plans. No credit card required to start your trial.</p>
+            <h3 className="font-medium mb-2">Is my data secure?</h3>
+            <p className="text-gray-600 text-sm">Yes, we use end-to-end encryption to protect your financial data. You control your encryption keys and can choose to decrypt for support.</p>
           </div>
           <div>
-            <h3 className="font-medium mb-2">Can I upgrade or downgrade my plan?</h3>
-            <p className="text-gray-600 text-sm">Yes, you can change your plan at any time. Changes will be prorated and reflected in your next billing cycle.</p>
+            <h3 className="font-medium mb-2">Can I self-host WENAB?</h3>
+            <p className="text-gray-600 text-sm">Yes! WENAB is fully open-source and well-documented for self-hosting. You can run it on your own server for complete control.</p>
+          </div>
+          <div>
+            <h3 className="font-medium mb-2">Do you have a mobile app?</h3>
+            <p className="text-gray-600 text-sm">Mobile apps for iOS and Android are in development. The web app is fully responsive and works great on mobile devices.</p>
           </div>
         </div>
       </div>

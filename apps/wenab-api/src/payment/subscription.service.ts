@@ -47,16 +47,8 @@ export class SubscriptionService {
   private getPlanDetails(planType: string, interval: string) {
     const plans = {
       basic: {
-        monthly: { amount: 999, name: 'Basic Plan - Monthly', description: 'Basic budgeting features' },
-        yearly: { amount: 9990, name: 'Basic Plan - Yearly', description: 'Basic budgeting features (save 17%)' },
-      },
-      premium: {
-        monthly: { amount: 1999, name: 'Premium Plan - Monthly', description: 'Advanced budgeting with analytics' },
-        yearly: { amount: 19990, name: 'Premium Plan - Yearly', description: 'Advanced budgeting with analytics (save 17%)' },
-      },
-      enterprise: {
-        monthly: { amount: 4999, name: 'Enterprise Plan - Monthly', description: 'Full features with team management' },
-        yearly: { amount: 49990, name: 'Enterprise Plan - Yearly', description: 'Full features with team management (save 17%)' },
+        monthly: { amount: 199, name: 'WENAB Basic - Monthly', description: 'Complete budgeting solution' },
+        yearly: { amount: 1599, name: 'WENAB Basic - Yearly', description: 'Complete budgeting solution (save 33%)' },
       },
     };
 
@@ -77,7 +69,7 @@ export class SubscriptionService {
       const subscription = await this.goCardlessService.createSubscription({
         customerId: customer.id,
         amount: planDetails.amount,
-        currency: 'GBP',
+        currency: 'EUR',
         interval: createSubscriptionDto.interval === 'yearly' ? 'yearly' : 'monthly',
         name: planDetails.name,
         description: planDetails.description,
@@ -93,7 +85,7 @@ export class SubscriptionService {
           plan_type: createSubscriptionDto.planType,
           status: subscription.status,
           amount: planDetails.amount,
-          currency: 'GBP',
+          currency: 'EUR',
           interval: createSubscriptionDto.interval,
           current_period_start: subscription.start_date,
           current_period_end: subscription.end_date,
@@ -237,82 +229,46 @@ export class SubscriptionService {
     return {
       basic: {
         monthly: {
-          price: 9.99,
-          currency: 'GBP',
+          price: 1.99,
+          currency: 'EUR',
           interval: 'monthly',
           features: [
-            'Unlimited budgets',
-            'Basic reporting',
-            'Email support',
-            'Mobile app access'
-          ]
-        },
-        yearly: {
-          price: 99.90,
-          currency: 'GBP',
-          interval: 'yearly',
-          savings: '17%',
-          features: [
-            'Unlimited budgets',
-            'Basic reporting',
-            'Email support',
-            'Mobile app access'
-          ]
-        }
-      },
-      premium: {
-        monthly: {
-          price: 19.99,
-          currency: 'GBP',
-          interval: 'monthly',
-          features: [
-            'Everything in Basic',
-            'Advanced analytics',
-            'Export functionality',
-            'Priority support',
-            'Custom categories'
-          ]
-        },
-        yearly: {
-          price: 199.90,
-          currency: 'GBP',
-          interval: 'yearly',
-          savings: '17%',
-          features: [
-            'Everything in Basic',
-            'Advanced analytics',
-            'Export functionality',
-            'Priority support',
-            'Custom categories'
-          ]
-        }
-      },
-      enterprise: {
-        monthly: {
-          price: 49.99,
-          currency: 'GBP',
-          interval: 'monthly',
-          features: [
-            'Everything in Premium',
-            'Team management',
+            'Zero-based budgeting',
+            'Envelope budgeting system',
+            'Real-time syncing',
+            'End-to-end encryption',
+            'Customizable categories',
+            'Goal tracking',
             'Shared budgets',
-            'API access',
-            'Dedicated support',
-            'Custom integrations'
+            'Bank integration',
+            'Custom reporting',
+            'Educational resources',
+            'Data export (CSV, PDF)',
+            'Roll-over system',
+            'Mobile app access',
+            'Community support'
           ]
         },
         yearly: {
-          price: 499.90,
-          currency: 'GBP',
+          price: 15.99,
+          currency: 'EUR',
           interval: 'yearly',
-          savings: '17%',
+          savings: '33%',
           features: [
-            'Everything in Premium',
-            'Team management',
+            'Zero-based budgeting',
+            'Envelope budgeting system',
+            'Real-time syncing',
+            'End-to-end encryption',
+            'Customizable categories',
+            'Goal tracking',
             'Shared budgets',
-            'API access',
-            'Dedicated support',
-            'Custom integrations'
+            'Bank integration',
+            'Custom reporting',
+            'Educational resources',
+            'Data export (CSV, PDF)',
+            'Roll-over system',
+            'Mobile app access',
+            'Community support'
           ]
         }
       }

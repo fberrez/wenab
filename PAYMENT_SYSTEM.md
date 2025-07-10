@@ -7,9 +7,9 @@ WENAB (We Need A Budget) includes a comprehensive payment system built with GoCa
 ## Features
 
 ### Subscription Plans
-- **Basic Plan**: £9.99/month or £99.90/year (17% savings)
-- **Premium Plan**: £19.99/month or £199.90/year (17% savings)
-- **Enterprise Plan**: £49.99/month or £499.90/year (17% savings)
+- **WENAB Complete**: €1.99/month or €15.99/year (33% savings)
+- **34-day free trial** with full feature access
+- **Single plan approach** - all features included
 
 ### Payment Features
 - Secure payment processing via GoCardless
@@ -160,6 +160,12 @@ SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
 # JWT Configuration
 JWT_SECRET=your-jwt-secret-key
 JWT_EXPIRES_IN=7d
+
+# Application Configuration
+PORT=3000
+NODE_ENV=development
+CORS_ORIGIN=http://localhost:4200
+FRONTEND_URL=http://localhost:4200
 ```
 
 ## Setup Instructions
