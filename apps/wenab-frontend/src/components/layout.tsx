@@ -9,7 +9,9 @@ import {
   LogOut, 
   User,
   Plus,
-  Settings
+  Settings,
+  Crown,
+  CreditCard as PaymentIcon
 } from 'lucide-react';
 
 interface LayoutProps {
@@ -24,6 +26,8 @@ export function Layout({ children }: LayoutProps) {
     { name: 'Dashboard', href: '/', icon: Home },
     { name: 'Budgets', href: '/budgets', icon: Wallet },
     { name: 'Transactions', href: '/transactions', icon: CreditCard },
+    { name: 'Pricing', href: '/pricing', icon: Crown },
+    { name: 'Subscription', href: '/subscription', icon: PaymentIcon },
   ];
 
   const handleSignOut = async () => {

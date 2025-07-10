@@ -3,6 +3,7 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { AuthModule } from "../auth/auth.module";
 import { BudgetModule } from "../budget/budget.module";
+import { PaymentModule } from "../payment/payment.module";
 import { ConfigModule } from "@nestjs/config";
 
 @Module({
@@ -13,6 +14,7 @@ import { ConfigModule } from "@nestjs/config";
     }),
     AuthModule,
     BudgetModule,
+    PaymentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
